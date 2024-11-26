@@ -1,0 +1,124 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Laptop",
+      "price": 1500.00,
+      "currency": "USD"
+    },
+    {
+      "id": 2,
+      "name": "Smartphone",
+      "price": 899.99,
+      "currency": "EUR"
+    },
+    {
+      "id": 3,
+      "name": "Headphones",
+      "price": 199.99,
+      "currency": "USD"
+    },
+    {
+      "id": 4,
+      "name": "Monitor",
+      "price": 299.99,
+      "currency": "GBP"
+    },
+    {
+      "id": 5,
+      "name": "Keyboard",
+      "price": 59.99,
+      "currency": "USD"
+    },
+    {
+      "id": 6,
+      "name": "Mouse",
+      "price": 49.99,
+      "currency": "EUR"
+    },
+    {
+      "id": 7,
+      "name": "Tablet",
+      "price": 499.99,
+      "currency": "GBP"
+    },
+    {
+      "id": 8,
+      "name": "Smartwatch",
+      "price": 199.99,
+      "currency": "USD"
+    },
+    {
+      "id": 9,
+      "name": "Printer",
+      "price": 129.99,
+      "currency": "EUR"
+    },
+    {
+      "id": 10,
+      "name": "Camera",
+      "price": 599.99,
+      "currency": "GBP"
+    },
+    {
+      "id": 11,
+      "name": "TV",
+      "price": 999.99,
+      "currency": "USD"
+    },
+    {
+      "id": 12,
+      "name": "SSD",
+      "price": 149.99,
+      "currency": "EUR"
+    },
+    {
+      "id": 13,
+      "name": "HDD",
+      "price": 79.99,
+      "currency": "GBP"
+    },
+    {
+      "id": 14,
+      "name": "Graphics Card",
+      "price": 899.99,
+      "currency": "USD"
+    },
+    {
+      "id": 15,
+      "name": "Router",
+      "price": 129.99,
+      "currency": "EUR"
+    },
+    {
+      "id": 16,
+      "name": "Speaker",
+      "price": 199.99,
+      "currency": "USD"
+    },
+    {
+      "id": 17,
+      "name": "Microphone",
+      "price": 99.99,
+      "currency": "EUR"
+    },
+    {
+      "id": 18,
+      "name": "Projector",
+      "price": 799.99,
+      "currency": "GBP"
+    },
+    {
+      "id": 19,
+      "name": "Charger",
+      "price": 29.99,
+      "currency": "USD"
+    },
+    {
+      "id": 20,
+      "name": "Power Bank",
+      "price": 49.99,
+      "currency": "EUR"
+    }
+  ]
+}
