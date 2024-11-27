@@ -4,3 +4,6 @@ export interface IProduct {
     price: number;
     currency: string;
 }
+
+export interface IProductForm extends Omit<IProduct, 'id'> {
+}

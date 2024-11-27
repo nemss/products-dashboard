@@ -1,5 +1,6 @@
 import React from 'react';
 import {Box, Button, Modal, Typography} from '@mui/material';
+import {modalStyle} from "../styles/modalStyles.ts";
 
 interface ConfirmationModalProps {
     open: boolean;
@@ -13,16 +14,17 @@ interface ConfirmationModalProps {
 }
 
 const ConfirmationModal:
-    React.FC<ConfirmationModalProps> = ({
-                                            open,
-                                            onClose,
-                                            onConfirm,
-                                            title,
-                                            description,
-                                            confirmText = 'Confirm',
-                                            cancelText = 'Cancel',
-                                            confirmButtonColor = 'primary',
-                                        }) => {
+    React.FC<ConfirmationModalProps> = (
+    {
+        open,
+        onClose,
+        onConfirm,
+        title,
+        description,
+        confirmText = 'Confirm',
+        cancelText = 'Cancel',
+        confirmButtonColor = 'primary',
+    }) => {
     return (
         <Modal
             open={open}
@@ -30,19 +32,7 @@ const ConfirmationModal:
             aria-labelledby="confirmation-modal-title"
             aria-describedby="confirmation-modal-description"
         >
-            <Box
-                sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 400,
-                    bgcolor: 'background.paper',
-                    borderRadius: 2,
-                    boxShadow: 24,
-                    p: 4,
-                }}
-            >
+            <Box sx={modalStyle}>
                 <Typography id="confirmation-modal-title" variant="h6" component="h2" mb={2}>
                     {title}
                 </Typography>

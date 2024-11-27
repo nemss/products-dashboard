@@ -18,7 +18,7 @@ interface ProductGridProps {
     permissions: string[];
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({products, permissions, onDelete}) => {
+const ProductGrid: React.FC<ProductGridProps> = ({products, permissions, onDelete, onEdit}) => {
     const columnDefs: ColDef[] = useMemo(() => [
         {headerName: 'Name', field: 'name', filter: true},
         {headerName: 'Price', field: 'price', filter: true},
@@ -27,7 +27,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, permissions, onDelet
             headerName: 'Actions', field: 'actions',
             cellRenderer: ActionButtons,
             cellRendererParams: {
-                onEdit: console.log,
+                onEdit,
                 onDelete,
                 permissions
             },
@@ -45,6 +45,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, permissions, onDelet
                     paginationPageSize={10}
                     paginationPageSizeSelector={[5, 10, 20, 30]}
                     animateRows
+                    domLayout="autoHeight"
                     suppressCellFocus={true}
                 />
             </div>

@@ -13,6 +13,8 @@ import {PERMISSIONS} from './constants/permisions';
 import {SNACKBAR_MESSAGES} from './constants/snackbarMessages';
 import {BUTTON_TEXTS} from './constants/buttonText';
 import ConfirmationModal from "./components/ConfirmationModal.tsx";
+import CreateEditProductModal from "./components/CreateEditProductModal.tsx";
+import {API_ERROR_MESSAGES} from "./constants/apiErrorMessages.ts";
 
 const SnackbarSeverity = {
     SUCCESS: 'success',
@@ -25,7 +27,6 @@ type SnackbarSeverity = typeof SnackbarSeverity[keyof typeof SnackbarSeverity];
 const App: React.FC = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [permissions, setPermissions] = useState<string[]>([]);
-    const [_, setIsCreateModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: SnackbarSeverity }>({
         open: false,
@@ -35,6 +36,10 @@ const App: React.FC = () => {
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+
+
+    const [isCreateEditModalOpen, setIsCreateEditModalOpen] = useState(false);
+    const [productToEdit, setProductToEdit] = useState<Omit<IProduct, 'id'> | null>(null);
 
     const showSnackbar = (message: string, severity: SnackbarSeverity) => {
         setSnackbar({open: true, message, severity});
@@ -68,23 +73,46 @@ const App: React.FC = () => {
         fetchData();
     }, []);
 
-    const handleEdit = async (updatedProduct: IProduct) => {
+    const handleCreateProduct = async (product: Omit<IProduct, 'id'>) => {
         setIsLoading(true);
         try {
-            const editedProduct = await updateProduct(updatedProduct);
+            const newProduct = {...product, id: Date.now()};
 
-            setProducts((prev) =>
-                prev.map((product) => (product.id === editedProduct.id ? editedProduct : product))
-            );
+            setProducts((prev) => [...prev, newProduct]);
 
-            showSnackbar(SNACKBAR_MESSAGES.PRODUCT_UPDATED, SnackbarSeverity.SUCCESS);
+            showSnackbar(SNACKBAR_MESSAGES.PRODUCT_CREATED, SnackbarSeverity.SUCCESS);
         } catch (error) {
-            console.error(error);
-            showSnackbar('Failed to update product', SnackbarSeverity.ERROR);
+            console.error('Error creating product:', error);
+            showSnackbar(API_ERROR_MESSAGES.ADD_PRODUCT, SnackbarSeverity.ERROR);
         } finally {
             setIsLoading(false);
+            setIsCreateEditModalOpen(false);
         }
     };
+
+    const handleEditProduct = async (product: IProduct) => {
+        setIsLoading(true);
+        try {
+            if (productToEdit) {
+                const updatedProduct = {...productToEdit, ...product};
+
+                await updateProduct(updatedProduct);
+
+                setProducts((prev) =>
+                    prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
+                );
+                showSnackbar(SNACKBAR_MESSAGES.PRODUCT_UPDATED, SnackbarSeverity.SUCCESS);
+            }
+        } catch (error) {
+            console.error('Error updating product:', error);
+            showSnackbar(SNACKBAR_MESSAGES.PRODUCT_UPDATED, SnackbarSeverity.ERROR);
+        } finally {
+            setIsLoading(false);
+            setIsCreateEditModalOpen(false);
+            setProductToEdit(null);
+        }
+    };
+
     const handleDeleteClick = (product: IProduct) => {
         setSelectedProduct(product);
         setIsDeleteModalOpen(true);
@@ -124,7 +152,10 @@ const App: React.FC = () => {
                 <Box>
                     <Box textAlign="right" mb={2}>
                         {permissions.includes(PERMISSIONS.CREATE) && (
-                            <Button variant="contained" onClick={() => setIsCreateModalOpen(true)}>
+                            <Button variant="contained" onClick={() => {
+                                setProductToEdit(null);
+                                setIsCreateEditModalOpen(true);
+                            }}>
                                 {BUTTON_TEXTS.CREATE}
                             </Button>
                         )}
@@ -133,12 +164,21 @@ const App: React.FC = () => {
                     <ProductGrid
                         products={products}
                         onDelete={handleDeleteClick}
-                        onEdit={handleEdit}
+                        onEdit={(product) => {
+                            setProductToEdit(product);
+                            setIsCreateEditModalOpen(true);
+                        }}
                         permissions={permissions}
                     />
                 </Box>
             )}
 
+            <CreateEditProductModal
+                open={isCreateEditModalOpen}
+                onClose={() => setIsCreateEditModalOpen(false)}
+                onSubmit={productToEdit ? handleEditProduct : handleCreateProduct}
+                initialValues={productToEdit || undefined}
+            />
 
             <ConfirmationModal
                 open={isDeleteModalOpen}

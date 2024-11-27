@@ -7,7 +7,7 @@ import {IProduct} from "../interfaces/product.ts";
 
 interface ActionButtonsProps extends CustomCellRendererProps {
     permissions: string[];
-    onEdit: () => void;
+    onEdit: (data: IProduct) => void;
     onDelete: (data: IProduct) => void;
 }
 
@@ -15,7 +15,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({permissions, onEdit, onDel
     return (
         <Box style={{display: 'flex', gap: '0.5rem', height: '100%', padding: '0.125rem'}}>
             {permissions.includes(PERMISSIONS.UPDATE) && (
-                <Button variant="contained" color="primary" size="small" onClick={onEdit}>
+                <Button variant="contained" color="primary" size="small" onClick={() => onEdit(data)}>
                     {BUTTON_TEXTS.EDIT}
                 </Button>
             )}
