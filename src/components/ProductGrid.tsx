@@ -13,12 +13,12 @@ import ActionButtons from './ActionButtons';
 
 interface ProductGridProps {
     products: IProduct[];
-    onDelete: (id: number) => void;
+    onDelete: (product: IProduct) => void;
     onEdit: (product: IProduct) => void;
     permissions: string[];
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({products, permissions}) => {
+const ProductGrid: React.FC<ProductGridProps> = ({products, permissions, onDelete}) => {
     const columnDefs: ColDef[] = useMemo(() => [
         {headerName: 'Name', field: 'name', filter: true},
         {headerName: 'Price', field: 'price', filter: true},
@@ -28,7 +28,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, permissions}) => {
             cellRenderer: ActionButtons,
             cellRendererParams: {
                 onEdit: console.log,
-                onDelete: console.log,
+                onDelete,
                 permissions
             },
             filter: true

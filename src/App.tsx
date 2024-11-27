@@ -12,6 +12,7 @@ import {getPermissions} from './services/permisionService';
 import {PERMISSIONS} from './constants/permisions';
 import {SNACKBAR_MESSAGES} from './constants/snackbarMessages';
 import {BUTTON_TEXTS} from './constants/buttonText';
+import ConfirmationModal from "./components/ConfirmationModal.tsx";
 
 const SnackbarSeverity = {
     SUCCESS: 'success',
@@ -31,6 +32,9 @@ const App: React.FC = () => {
         message: '',
         severity: 'success',
     });
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
 
     const showSnackbar = (message: string, severity: SnackbarSeverity) => {
         setSnackbar({open: true, message, severity});
@@ -81,15 +85,23 @@ const App: React.FC = () => {
             setIsLoading(false);
         }
     };
+    const handleDeleteClick = (product: IProduct) => {
+        setSelectedProduct(product);
+        setIsDeleteModalOpen(true);
+    };
 
-    const handleDelete = async (id: number) => {
+    const handleConfirmDelete = async () => {
         setIsLoading(true);
         try {
-            await deleteProduct(id);
+            console.log('Selected product', selectedProduct)
+            if (selectedProduct) {
+                await deleteProduct(selectedProduct.id);
 
-            setProducts((prev) => prev.filter((product) => product.id !== id));
+                setProducts((prev) => prev.filter((product) => product.id !== selectedProduct.id));
 
-            showSnackbar(SNACKBAR_MESSAGES.PRODUCT_DELETED, SnackbarSeverity.SUCCESS);
+                showSnackbar(SNACKBAR_MESSAGES.PRODUCT_DELETED, SnackbarSeverity.SUCCESS)
+                setIsDeleteModalOpen(false);
+            }
         } catch (error) {
             console.error(error);
             showSnackbar('Failed to delete product', SnackbarSeverity.ERROR);
@@ -120,16 +132,26 @@ const App: React.FC = () => {
 
                     <ProductGrid
                         products={products}
-                        onDelete={handleDelete}
+                        onDelete={handleDeleteClick}
                         onEdit={handleEdit}
                         permissions={permissions}
                     />
                 </Box>
             )}
 
+
+            <ConfirmationModal
+                open={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+                title="Confirm Deletion"
+                description={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
+                confirmButtonColor="error"
+            />
+
             <Snackbar
                 open={snackbar.open}
-                autoHideDuration={2000}
+                autoHideDuration={2500}
                 onClose={handleSnackbarClose}
                 anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             >
