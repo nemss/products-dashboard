@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Box, Button, CircularProgress, Snackbar, Typography} from '@mui/material';
+import {Alert, Box, Button, Snackbar, Typography} from '@mui/material';
 
 import ProductGrid from './components/ProductGrid';
 import ConfirmationModal from './components/ConfirmationModal';
@@ -15,6 +15,7 @@ import {BUTTON_TEXTS} from './constants/button';
 import {API_ERROR_MESSAGES} from './constants/apiErrorMessages';
 
 import useSnackbar, {SnackbarSeverity} from './hooks/useSnackbar';
+import Loader from "./components/Loader.tsx";
 
 const App: React.FC = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -137,16 +138,11 @@ const App: React.FC = () => {
     };
 
     return (
-        <Box padding="1rem">
-            <Typography variant="h3">Products Dashboard</Typography>
+        <>
+            <Loader open={isLoading}/>
+            <Box padding="1rem">
+                <Typography variant="h3">Products Dashboard</Typography>
 
-            {isLoading && (
-                <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-                    <CircularProgress/>
-                </Box>
-            )}
-
-            {!isLoading && (
                 <Box>
                     <Box textAlign="right" mb={2}>
                         {permissions.includes(PERMISSIONS.CREATE) && (
@@ -163,39 +159,39 @@ const App: React.FC = () => {
                         permissions={permissions}
                     />
                 </Box>
-            )}
 
-            <CreateEditProductModal
-                open={isCreateEditModalOpen}
-                onClose={closeCreateEditModal}
-                onSubmit={productToEdit ? handleEditProduct : handleCreateProduct}
-                initialValues={productToEdit || undefined}
-            />
+                <CreateEditProductModal
+                    open={isCreateEditModalOpen}
+                    onClose={closeCreateEditModal}
+                    onSubmit={productToEdit ? handleEditProduct : handleCreateProduct}
+                    initialValues={productToEdit || undefined}
+                />
 
-            <ConfirmationModal
-                open={isDeleteModalOpen}
-                onClose={closeDeleteModal}
-                onConfirm={handleConfirmDelete}
-                title="Confirm Deletion"
-                description={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
-                confirmButtonColor="error"
-            />
+                <ConfirmationModal
+                    open={isDeleteModalOpen}
+                    onClose={closeDeleteModal}
+                    onConfirm={handleConfirmDelete}
+                    title="Confirm Deletion"
+                    description={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
+                    confirmButtonColor="error"
+                />
 
-            <Snackbar
-                open={snackbar.open}
-                autoHideDuration={2500}
-                onClose={closeSnackbar}
-                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-            >
-                <Alert
+                <Snackbar
+                    open={snackbar.open}
+                    autoHideDuration={2500}
                     onClose={closeSnackbar}
-                    severity={snackbar.severity}
-                    sx={{width: '100%'}}
+                    anchorOrigin={{vertical: 'top', horizontal: 'right'}}
                 >
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
-        </Box>
+                    <Alert
+                        onClose={closeSnackbar}
+                        severity={snackbar.severity}
+                        sx={{width: '100%'}}
+                    >
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
+            </Box>
+        </>
     );
 };
 
