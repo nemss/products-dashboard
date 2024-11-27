@@ -1,16 +1,22 @@
 import React, {useEffect} from 'react';
+
 import {Controller, useForm} from 'react-hook-form';
 import * as Yup from 'yup';
-import {Box, Button, Modal, TextField, Typography,} from '@mui/material';
+import {yupResolver} from '@hookform/resolvers/yup';
+
+import {Box, Modal, TextField, Typography} from '@mui/material';
+
 import {IProduct} from '../interfaces/product';
-import {yupResolver} from "@hookform/resolvers/yup";
-import {BUTTON_TEXTS} from "../constants/buttonText.ts";
-import {modalStyle} from "../styles/modalStyles.ts";
+import {modalStyle} from '../styles/modalStyles';
+import {generateAriaAttributes} from '../utils/generateAriaAttributes';
+
+import ActionButtons from './ActionButtons';
+import {BUTTON_TEXTS} from '../constants/button';
 
 interface CreateEditProductModalProps {
     open: boolean;
     onClose: () => void;
-    onSubmit: (product: Omit<IProduct, 'id'>) => void;
+    onSubmit: (product: Omit<IProduct, 'id'> | IProduct) => void;
     initialValues?: Omit<IProduct, 'id'>;
 }
 
@@ -65,7 +71,7 @@ const CreateEditProductModal: React.FC<CreateEditProductModalProps> = (
     };
 
     return (
-        <Modal open={open} onClose={handleClose} aria-labelledby="create-edit-product-modal">
+        <Modal open={open} onClose={handleClose} {...generateAriaAttributes('create-edit-product-modal')}>
             <Box sx={modalStyle}>
                 <Typography variant="h6" component="h2" mb={2}>
                     {initialValues.name ? 'Edit Product' : 'Create Product'}
@@ -117,14 +123,11 @@ const CreateEditProductModal: React.FC<CreateEditProductModalProps> = (
                             />
                         )}
                     />
-                    <Box display="flex" justifyContent="flex-end" mt={2} gap={2}>
-                        <Button variant="outlined" onClick={handleClose}>
-                            {BUTTON_TEXTS.CANCEL}
-                        </Button>
-                        <Button variant="contained" type="submit">
-                            {initialValues.name ? BUTTON_TEXTS.SAVE_CHANGES : BUTTON_TEXTS.CREATE}
-                        </Button>
-                    </Box>
+                    <ActionButtons
+                        onConfirm={handleSubmit(submitHandler)}
+                        onCancel={handleClose}
+                        confirmText={initialValues.name ? BUTTON_TEXTS.SAVE_CHANGES : BUTTON_TEXTS.CREATE}
+                    />
                 </form>
             </Box>
         </Modal>

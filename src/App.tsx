@@ -11,7 +11,7 @@ import {getPermissions} from './services/permisionService';
 
 import {PERMISSIONS} from './constants/permisions';
 import {SNACKBAR_MESSAGES} from './constants/snackbarMessages';
-import {BUTTON_TEXTS} from './constants/buttonText';
+import {BUTTON_TEXTS} from './constants/button.ts';
 import ConfirmationModal from "./components/ConfirmationModal.tsx";
 import CreateEditProductModal from "./components/CreateEditProductModal.tsx";
 import {API_ERROR_MESSAGES} from "./constants/apiErrorMessages.ts";
@@ -121,7 +121,6 @@ const App: React.FC = () => {
     const handleConfirmDelete = async () => {
         setIsLoading(true);
         try {
-            console.log('Selected product', selectedProduct)
             if (selectedProduct) {
                 await deleteProduct(selectedProduct.id);
 

@@ -9,7 +9,7 @@ import {Box} from '@mui/material';
 
 import {IProduct} from '../interfaces/product';
 
-import ActionButtons from './ActionButtons';
+import GridActionButtons from './GridActionButtons.tsx';
 
 interface ProductGridProps {
     products: IProduct[];
@@ -25,7 +25,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, permissions, onDelet
         {headerName: 'Currency', field: 'currency', filter: true},
         {
             headerName: 'Actions', field: 'actions',
-            cellRenderer: ActionButtons,
+            cellRenderer: GridActionButtons,
             cellRendererParams: {
                 onEdit,
                 onDelete,

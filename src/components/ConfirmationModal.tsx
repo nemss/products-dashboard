@@ -1,6 +1,12 @@
 import React from 'react';
-import {Box, Button, Modal, Typography} from '@mui/material';
-import {modalStyle} from "../styles/modalStyles.ts";
+
+import {Box, Modal, Typography} from '@mui/material';
+
+import {modalStyle} from '../styles/modalStyles';
+import {generateAriaAttributes} from '../utils/generateAriaAttributes';
+
+import ActionButtons from './ActionButtons';
+import {BUTTON_COLORS, BUTTON_TEXTS, ButtonColor} from "../constants/button.ts";
 
 interface ConfirmationModalProps {
     open: boolean;
@@ -10,7 +16,7 @@ interface ConfirmationModalProps {
     description: string;
     confirmText?: string;
     cancelText?: string;
-    confirmButtonColor?: 'primary' | 'error';
+    confirmButtonColor?: ButtonColor;
 }
 
 const ConfirmationModal:
@@ -21,16 +27,15 @@ const ConfirmationModal:
         onConfirm,
         title,
         description,
-        confirmText = 'Confirm',
-        cancelText = 'Cancel',
-        confirmButtonColor = 'primary',
+        confirmText = BUTTON_TEXTS.CONFIRM,
+        cancelText = BUTTON_TEXTS.CANCEL,
+        confirmButtonColor = BUTTON_COLORS.PRIMARY,
     }) => {
     return (
         <Modal
             open={open}
             onClose={onClose}
-            aria-labelledby="confirmation-modal-title"
-            aria-describedby="confirmation-modal-description"
+            {...generateAriaAttributes('confirmation-modal')}
         >
             <Box sx={modalStyle}>
                 <Typography id="confirmation-modal-title" variant="h6" component="h2" mb={2}>
@@ -39,14 +44,13 @@ const ConfirmationModal:
                 <Typography id="confirmation-modal-description" variant="body1" mb={4}>
                     {description}
                 </Typography>
-                <Box display="flex" justifyContent="flex-end" gap={2}>
-                    <Button variant="outlined" onClick={onClose}>
-                        {cancelText}
-                    </Button>
-                    <Button variant="contained" color={confirmButtonColor} onClick={onConfirm}>
-                        {confirmText}
-                    </Button>
-                </Box>
+                <ActionButtons
+                    onConfirm={onConfirm}
+                    onCancel={onClose}
+                    confirmText={confirmText}
+                    cancelText={cancelText}
+                    confirmColor={confirmButtonColor}
+                />
             </Box>
         </Modal>
     );
