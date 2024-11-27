@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-
 import {Alert, Box, Button, CircularProgress, Snackbar, Typography} from '@mui/material';
 
 import ProductGrid from './components/ProductGrid';
@@ -7,8 +6,7 @@ import ConfirmationModal from './components/ConfirmationModal';
 import CreateEditProductModal from './components/CreateEditProductModal';
 
 import {IProduct} from './interfaces/product';
-
-import {deleteProduct, getProducts, updateProduct} from './services/apiService';
+import {addProduct, deleteProduct, getProducts, updateProduct} from './services/apiService';
 import {getPermissions} from './services/permisionService';
 
 import {PERMISSIONS} from './constants/permisions';
@@ -22,6 +20,7 @@ const App: React.FC = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [permissions, setPermissions] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
     const [isCreateEditModalOpen, setIsCreateEditModalOpen] = useState(false);
@@ -39,12 +38,11 @@ const App: React.FC = () => {
                 if (fetchedPermissions.includes(PERMISSIONS.READ)) {
                     const fetchedProducts = await getProducts();
                     setProducts(fetchedProducts);
+                    showSnackbar(SNACKBAR_MESSAGES.PRODUCTS_LOADED, SnackbarSeverity.SUCCESS);
                 }
-
-                showSnackbar(SNACKBAR_MESSAGES.PRODUCTS_LOADED, SnackbarSeverity.SUCCESS);
             } catch (error) {
                 console.error(error);
-                showSnackbar('Failed to load data', SnackbarSeverity.ERROR);
+                showSnackbar(API_ERROR_MESSAGES.FETCH_PRODUCTS, SnackbarSeverity.ERROR);
             } finally {
                 setIsLoading(false);
             }
@@ -53,16 +51,24 @@ const App: React.FC = () => {
         fetchData();
     }, []);
 
+    const openCreateModal = () => {
+        setProductToEdit(null);
+        setIsCreateEditModalOpen(true);
+    };
+
     const handleCreateProduct = async (product: Omit<IProduct, 'id'>) => {
         setIsLoading(true);
         try {
             const newProduct = {...product, id: Date.now()};
 
-            setProducts((prev) => [...prev, newProduct]);
+            const responseData = await addProduct(newProduct)
 
-            showSnackbar(SNACKBAR_MESSAGES.PRODUCT_CREATED, SnackbarSeverity.SUCCESS);
+            if (responseData) {
+                setProducts((prev) => [...prev, responseData]);
+                showSnackbar(SNACKBAR_MESSAGES.PRODUCT_CREATED, SnackbarSeverity.SUCCESS);
+            }
         } catch (error) {
-            console.error('Error creating product:', error);
+            console.error(error);
             showSnackbar(API_ERROR_MESSAGES.ADD_PRODUCT, SnackbarSeverity.ERROR);
         } finally {
             setIsLoading(false);
@@ -76,16 +82,18 @@ const App: React.FC = () => {
             if (productToEdit) {
                 const updatedProduct = {...productToEdit, ...product};
 
-                await updateProduct(updatedProduct);
+                const responseData = await updateProduct(updatedProduct);
 
-                setProducts((prev) =>
-                    prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
-                );
-                showSnackbar(SNACKBAR_MESSAGES.PRODUCT_UPDATED, SnackbarSeverity.SUCCESS);
+                if (responseData) {
+                    setProducts((prev) =>
+                        prev.map((p) => (p.id === responseData.id ? updatedProduct : p))
+                    );
+                    showSnackbar(SNACKBAR_MESSAGES.PRODUCT_UPDATED, SnackbarSeverity.SUCCESS);
+                }
             }
         } catch (error) {
-            console.error('Error updating product:', error);
-            showSnackbar(SNACKBAR_MESSAGES.PRODUCT_UPDATED, SnackbarSeverity.ERROR);
+            console.error(error);
+            showSnackbar(API_ERROR_MESSAGES.UPDATE_PRODUCT, SnackbarSeverity.ERROR);
         } finally {
             setIsLoading(false);
             setIsCreateEditModalOpen(false);
@@ -102,19 +110,30 @@ const App: React.FC = () => {
         setIsLoading(true);
         try {
             if (selectedProduct) {
-                await deleteProduct(selectedProduct.id);
+                const responseData = await deleteProduct(selectedProduct.id);
 
-                setProducts((prev) => prev.filter((product) => product.id !== selectedProduct.id));
-
-                showSnackbar(SNACKBAR_MESSAGES.PRODUCT_DELETED, SnackbarSeverity.SUCCESS)
-                setIsDeleteModalOpen(false);
+                if (responseData) {
+                    setProducts((prev) =>
+                        prev.filter((product) => product.id !== selectedProduct.id)
+                    );
+                    showSnackbar(SNACKBAR_MESSAGES.PRODUCT_DELETED, SnackbarSeverity.SUCCESS);
+                }
             }
         } catch (error) {
             console.error(error);
-            showSnackbar('Failed to delete product', SnackbarSeverity.ERROR);
+            showSnackbar(API_ERROR_MESSAGES.DELETE_PRODUCT, SnackbarSeverity.ERROR);
         } finally {
             setIsLoading(false);
+            setIsDeleteModalOpen(false);
         }
+    };
+
+    const closeCreateEditModal = () => setIsCreateEditModalOpen(false);
+    const closeDeleteModal = () => setIsDeleteModalOpen(false);
+
+    const handleEditClick = (product: IProduct) => {
+        setProductToEdit(product);
+        setIsCreateEditModalOpen(true);
     };
 
     return (
@@ -131,10 +150,7 @@ const App: React.FC = () => {
                 <Box>
                     <Box textAlign="right" mb={2}>
                         {permissions.includes(PERMISSIONS.CREATE) && (
-                            <Button variant="contained" onClick={() => {
-                                setProductToEdit(null);
-                                setIsCreateEditModalOpen(true);
-                            }}>
+                            <Button variant="contained" onClick={openCreateModal}>
                                 {BUTTON_TEXTS.CREATE}
                             </Button>
                         )}
@@ -143,10 +159,7 @@ const App: React.FC = () => {
                     <ProductGrid
                         products={products}
                         onDelete={handleDeleteClick}
-                        onEdit={(product) => {
-                            setProductToEdit(product);
-                            setIsCreateEditModalOpen(true);
-                        }}
+                        onEdit={handleEditClick}
                         permissions={permissions}
                     />
                 </Box>
@@ -154,14 +167,14 @@ const App: React.FC = () => {
 
             <CreateEditProductModal
                 open={isCreateEditModalOpen}
-                onClose={() => setIsCreateEditModalOpen(false)}
+                onClose={closeCreateEditModal}
                 onSubmit={productToEdit ? handleEditProduct : handleCreateProduct}
                 initialValues={productToEdit || undefined}
             />
 
             <ConfirmationModal
                 open={isDeleteModalOpen}
-                onClose={() => setIsDeleteModalOpen(false)}
+                onClose={closeDeleteModal}
                 onConfirm={handleConfirmDelete}
                 title="Confirm Deletion"
                 description={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
@@ -174,7 +187,11 @@ const App: React.FC = () => {
                 onClose={closeSnackbar}
                 anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             >
-                <Alert onClose={closeSnackbar} severity={snackbar.severity} sx={{width: '100%'}}>
+                <Alert
+                    onClose={closeSnackbar}
+                    severity={snackbar.severity}
+                    sx={{width: '100%'}}
+                >
                     {snackbar.message}
                 </Alert>
             </Snackbar>

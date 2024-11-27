@@ -33,7 +33,8 @@ const validationSchema = Yup.object().shape({
         .matches(/^[A-Z]{3}$/, 'Currency must be a valid 3-letter code (e.g., USD)'),
 });
 
-const CreateEditProductModal: React.FC<CreateEditProductModalProps> = (
+const CreateEditProductModal:
+    React.FC<CreateEditProductModalProps> = (
     {
         open,
         onClose,
@@ -56,10 +57,10 @@ const CreateEditProductModal: React.FC<CreateEditProductModalProps> = (
     });
 
     useEffect(() => {
-        if (initialValues && open) {
+        if (open && initialValues) {
             reset(initialValues);
         }
-    }, [initialValues]);
+    }, [open, reset]);
 
     const handleClose = () => {
         onClose();

@@ -1,9 +1,12 @@
 import React from 'react';
+
 import {Box, Button} from '@mui/material';
-import {BUTTON_TEXTS} from "../constants/button.ts";
-import {PERMISSIONS} from "../constants/permisions.ts";
-import {CustomCellRendererProps} from "ag-grid-react";
-import {IProduct} from "../interfaces/product.ts";
+
+import {BUTTON_TEXTS} from '../constants/button';
+import {PERMISSIONS} from '../constants/permisions';
+
+import {CustomCellRendererProps} from 'ag-grid-react';
+import {IProduct} from '../interfaces/product.ts';
 
 interface ActionButtonsProps extends CustomCellRendererProps {
     permissions: string[];

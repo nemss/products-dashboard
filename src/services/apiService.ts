@@ -16,16 +16,16 @@ export const getProducts = async (): Promise<IProduct[]> => {
             const data = await response.json();
             productsCache = data.products || [];
         }
-        return productsCache;
+        return [...productsCache];
     } catch (error) {
         console.error(error);
-        return []
+        throw new Error(API_ERROR_MESSAGES.FETCH_PRODUCTS);
     }
 };
 
 export const addProduct = async (product: IProduct): Promise<IProduct> => {
     try {
-        const newProduct: IProduct = { ...product, id: Date.now() };
+        const newProduct: IProduct = {...product, id: Date.now()};
 
         productsCache.push(newProduct);
         await new Promise((resolve) => setTimeout(resolve, 500));
