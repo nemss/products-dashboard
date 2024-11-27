@@ -7,7 +7,7 @@ import {ColDef} from 'ag-grid-community';
 
 import {Box} from '@mui/material';
 
-import {IProduct} from '../interfaces/product';
+import {IProduct} from '../../interfaces/product.ts';
 
 import GridActionButtons from './GridActionButtons.tsx';
 

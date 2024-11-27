@@ -2,11 +2,11 @@ import React from 'react';
 
 import {Box, Modal, Typography} from '@mui/material';
 
-import {modalStyle} from '../styles/modalStyles';
-import {generateAriaAttributes} from '../utils/generateAriaAttributes';
+import {modalStyle} from '../../styles/modalStyles.ts';
+import {generateAriaAttributes} from '../../utils/generateAriaAttributes.ts';
 
-import ActionButtons from './ActionButtons';
-import {BUTTON_COLORS, BUTTON_TEXTS, ButtonColor} from "../constants/button.ts";
+import ActionButtons from './ActionButtons.tsx';
+import {BUTTON_COLORS, BUTTON_TEXTS, ButtonColor} from "../../constants/button.ts";
 
 interface ConfirmationModalProps {
     open: boolean;

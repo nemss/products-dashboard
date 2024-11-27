@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Box, Button} from '@mui/material';
-import {BUTTON_COLORS, BUTTON_TEXTS, ButtonColor} from "../constants/button.ts";
+import {BUTTON_COLORS, BUTTON_TEXTS, ButtonColor} from "../../constants/button.ts";
 
 interface FormActionButtonsProps {
     onConfirm: () => void;

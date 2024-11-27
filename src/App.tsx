@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Box, Button, Snackbar, Typography} from '@mui/material';
 
-import ProductGrid from './components/ProductGrid';
-import ConfirmationModal from './components/ConfirmationModal';
-import CreateEditProductModal from './components/CreateEditProductModal';
+import ProductGrid from './components/products/ProductGrid.tsx';
+import ConfirmationModal from './components/common/ConfirmationModal.tsx';
+import CreateEditProductModal from './components/products/CreateEditProductModal.tsx';
 
 import {IProduct} from './interfaces/product';
 import {addProduct, deleteProduct, getProducts, updateProduct} from './services/apiService';
@@ -15,7 +15,7 @@ import {BUTTON_TEXTS} from './constants/button';
 import {API_ERROR_MESSAGES} from './constants/apiErrorMessages';
 
 import useSnackbar, {SnackbarSeverity} from './hooks/useSnackbar';
-import Loader from "./components/Loader.tsx";
+import Loader from "./components/common/Loader.tsx";
 
 const App: React.FC = () => {
     const [products, setProducts] = useState<IProduct[]>([]);

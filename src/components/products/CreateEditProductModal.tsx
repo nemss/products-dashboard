@@ -6,12 +6,12 @@ import {yupResolver} from '@hookform/resolvers/yup';
 
 import {Box, Modal, TextField, Typography} from '@mui/material';
 
-import {IProduct} from '../interfaces/product';
-import {modalStyle} from '../styles/modalStyles';
-import {generateAriaAttributes} from '../utils/generateAriaAttributes';
+import {IProduct} from '../../interfaces/product.ts';
+import {modalStyle} from '../../styles/modalStyles.ts';
+import {generateAriaAttributes} from '../../utils/generateAriaAttributes.ts';
 
-import ActionButtons from './ActionButtons';
-import {BUTTON_TEXTS} from '../constants/button';
+import ActionButtons from '../common/ActionButtons.tsx';
+import {BUTTON_TEXTS} from '../../constants/button.ts';
 
 interface CreateEditProductModalProps {
     open: boolean;
