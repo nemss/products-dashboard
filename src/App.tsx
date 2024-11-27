@@ -100,7 +100,7 @@ const App: React.FC = () => {
 
     return (
         <Box padding="1rem">
-            <Typography>Products Panel</Typography>
+            <Typography variant="h3">Products Dashboard</Typography>
 
             {isLoading && (
                 <Box display="flex" justifyContent="center" alignItems="center" mt={2}>

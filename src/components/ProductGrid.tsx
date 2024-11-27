@@ -45,6 +45,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, permissions}) => {
                     paginationPageSize={10}
                     paginationPageSizeSelector={[5, 10, 20, 30]}
                     animateRows
+                    suppressCellFocus={true}
                 />
             </div>
         </Box>
