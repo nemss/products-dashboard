@@ -1,50 +1,45 @@
-# React + TypeScript + Vite
+# Products Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application to manage products with CRUD (Create, Read, Update, Delete) functionality using **React**, *
+*TypeScript**, **MUI**, **React Hook Form**, **Yup**, and **AG Grid**.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Create Products:** Add a new product using a modal form with validation.
+- **Read Products:** Display a list of products in a data grid with pagination.
+- **Update Products:** Edit existing products using a modal form.
+- **Delete Products:** Remove a product with confirmation.
+- **Permission Control:** Show or hide actions (Create, Update, Delete) based on permissions.
+- **Loading Indicators:** Visual feedback with a backdrop loader during operations.
+- **Notifications:** Feedback using snackbars for all CRUD actions.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Tech Stack
 
-- Configure the top-level `parserOptions` property like this:
+- **React**: UI development library.
+- **TypeScript**: Ensures type safety.
+- **Vite**: Blazing fast development build tool.
+- **MUI**: Provides modern components and styling.
+- **React Hook Form**: For form management.
+- **Yup**: For form validation.
+- **AG Grid**: High-performance grid for data display.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Installation
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+1. **Clone the Repository:**
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+   ```bash
+   git clone git@github.com:nemss/products-dashboard.git
+
+2. **Navigate to the Project Directory:**
+
+    ```bash
+    cd products-dashboard
+
+3. **Install Dependencies:**
+
+    ```bash
+    npm install
