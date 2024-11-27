@@ -43,3 +43,25 @@ A React application to manage products with CRUD (Create, Read, Update, Delete) 
 
     ```bash
     npm install
+
+## Project Structure
+
+```plaintext
+src/
+├── assets/              # Static assets like images, icons, etc.
+├── components/          # Reusable React components
+│   ├── common/          # General-purpose components
+│   │   ├── ActionButtons.tsx         # Reusable action buttons
+│   │   ├── Loader.tsx                # Backdrop loader component
+│   │   ├── ConfirmationModal.tsx     # Universal confirmation modal
+│   ├── products/       # Components specific to product management
+│       ├── CreateEditProductModal.tsx  # Modal for adding/editing products
+│       ├── GridActionButtons.tsx       # Grid-specific action buttons
+│       ├── ProductGrid.tsx             # Data grid for displaying products
+├── constants/           # Static values like texts, permissions, etc.
+├── hooks/               # Custom React hooks (e.g., useSnackbar)
+├── interfaces/          # TypeScript interfaces and types
+├── services/            # API services for CRUD operations and permissions
+├── styles/              # Custom styles for components
+├── utils/               # Utility functions
+└── App.tsx              # Main entry point of the app
