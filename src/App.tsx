@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 
-import ProductGrid from './components/ProductGrid';
-
 import {Alert, Box, Button, CircularProgress, Snackbar, Typography} from '@mui/material';
+
+import ProductGrid from './components/ProductGrid';
+import ConfirmationModal from './components/ConfirmationModal';
+import CreateEditProductModal from './components/CreateEditProductModal';
 
 import {IProduct} from './interfaces/product';
 
@@ -11,43 +13,21 @@ import {getPermissions} from './services/permisionService';
 
 import {PERMISSIONS} from './constants/permisions';
 import {SNACKBAR_MESSAGES} from './constants/snackbarMessages';
-import {BUTTON_TEXTS} from './constants/button.ts';
-import ConfirmationModal from "./components/ConfirmationModal.tsx";
-import CreateEditProductModal from "./components/CreateEditProductModal.tsx";
-import {API_ERROR_MESSAGES} from "./constants/apiErrorMessages.ts";
+import {BUTTON_TEXTS} from './constants/button';
+import {API_ERROR_MESSAGES} from './constants/apiErrorMessages';
 
-const SnackbarSeverity = {
-    SUCCESS: 'success',
-    ERROR: 'error',
-} as const;
-
-type SnackbarSeverity = typeof SnackbarSeverity[keyof typeof SnackbarSeverity];
-
+import useSnackbar, {SnackbarSeverity} from './hooks/useSnackbar';
 
 const App: React.FC = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [permissions, setPermissions] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: SnackbarSeverity }>({
-        open: false,
-        message: '',
-        severity: 'success',
-    });
-
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
-
-
     const [isCreateEditModalOpen, setIsCreateEditModalOpen] = useState(false);
     const [productToEdit, setProductToEdit] = useState<Omit<IProduct, 'id'> | null>(null);
 
-    const showSnackbar = (message: string, severity: SnackbarSeverity) => {
-        setSnackbar({open: true, message, severity});
-    };
-
-    const handleSnackbarClose = () => {
-        setSnackbar({open: false, message: '', severity: SnackbarSeverity.SUCCESS});
-    };
+    const {snackbar, showSnackbar, closeSnackbar} = useSnackbar();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -191,10 +171,10 @@ const App: React.FC = () => {
             <Snackbar
                 open={snackbar.open}
                 autoHideDuration={2500}
-                onClose={handleSnackbarClose}
+                onClose={closeSnackbar}
                 anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             >
-                <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{width: '100%'}}>
+                <Alert onClose={closeSnackbar} severity={snackbar.severity} sx={{width: '100%'}}>
                     {snackbar.message}
                 </Alert>
             </Snackbar>
