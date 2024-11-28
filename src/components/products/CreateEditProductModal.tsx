@@ -6,7 +6,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 
 import {Box, Modal, TextField, Typography} from '@mui/material';
 
-import {IProduct} from '../../interfaces/product.ts';
+import {IProduct, ProductInput} from '../../interfaces/product.ts';
 import {modalStyle} from '../../styles/modalStyles.ts';
 import {generateAriaAttributes} from '../../utils/generateAriaAttributes.ts';
 
@@ -16,7 +16,7 @@ import {BUTTON_TEXTS} from '../../constants/button.ts';
 interface CreateEditProductModalProps {
     open: boolean;
     onClose: () => void;
-    onSubmit: (product: Omit<IProduct, 'id'> | IProduct) => void;
+    onSubmit: (product: ProductInput) => void;
     initialValues?: Omit<IProduct, 'id'>;
 }
 
@@ -66,7 +66,7 @@ const CreateEditProductModal:
         onClose();
     };
 
-    const submitHandler = (data: Omit<IProduct, 'id'>) => {
+    const submitHandler = (data: ProductInput) => {
         onSubmit(data);
         handleClose();
     };
