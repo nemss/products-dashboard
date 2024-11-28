@@ -37,9 +37,12 @@ const App: React.FC = () => {
                 setPermissions(fetchedPermissions);
 
                 if (fetchedPermissions.includes(PERMISSIONS.READ)) {
-                    const fetchedProducts = await getProducts();
-                    setProducts(fetchedProducts);
-                    showSnackbar(SNACKBAR_MESSAGES.PRODUCTS_LOADED, SnackbarSeverity.SUCCESS);
+                    const response = await getProducts();
+
+                    if (response.ok) {
+                        setProducts(response.data as IProduct[]);
+                        showSnackbar(SNACKBAR_MESSAGES.PRODUCTS_LOADED, SnackbarSeverity.SUCCESS);
+                    }
                 }
             } catch (error) {
                 console.error(error);
@@ -62,10 +65,10 @@ const App: React.FC = () => {
         try {
             const newProduct = {...product, id: Date.now()};
 
-            const responseData = await addProduct(newProduct)
+            const response = await addProduct(newProduct)
 
-            if (responseData) {
-                setProducts((prev) => [...prev, responseData]);
+            if (response.ok) {
+                setProducts((prev) => [...prev, response.data as IProduct]);
                 showSnackbar(SNACKBAR_MESSAGES.PRODUCT_CREATED, SnackbarSeverity.SUCCESS);
             }
         } catch (error) {
@@ -83,11 +86,11 @@ const App: React.FC = () => {
             if (productToEdit) {
                 const updatedProduct = {...productToEdit, ...product};
 
-                const responseData = await updateProduct(updatedProduct);
+                const response = await updateProduct(updatedProduct);
 
-                if (responseData) {
+                if (response.ok) {
                     setProducts((prev) =>
-                        prev.map((p) => (p.id === responseData.id ? updatedProduct : p))
+                        prev.map((p) => (p.id === response.data?.id ? updatedProduct : p))
                     );
                     showSnackbar(SNACKBAR_MESSAGES.PRODUCT_UPDATED, SnackbarSeverity.SUCCESS);
                 }
@@ -111,13 +114,15 @@ const App: React.FC = () => {
         setIsLoading(true);
         try {
             if (selectedProduct) {
-                const responseData = await deleteProduct(selectedProduct.id);
+                const response = await deleteProduct(selectedProduct.id);
 
-                if (responseData) {
+                if (response.ok) {
                     setProducts((prev) =>
                         prev.filter((product) => product.id !== selectedProduct.id)
                     );
                     showSnackbar(SNACKBAR_MESSAGES.PRODUCT_DELETED, SnackbarSeverity.SUCCESS);
+                } else {
+                    showSnackbar(API_ERROR_MESSAGES.DELETE_PRODUCT, SnackbarSeverity.ERROR);
                 }
             }
         } catch (error) {
@@ -141,7 +146,7 @@ const App: React.FC = () => {
         <>
             <Loader open={isLoading}/>
             <Box padding="1rem">
-                <Typography variant="h3">Products Dashboard</Typography>
+                <Typography variant="h3">Products</Typography>
 
                 <Box>
                     <Box textAlign="right" mb={2}>

@@ -7,18 +7,17 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({open}) => {
     return (
-        <>
-            {open && (<Backdrop
-                sx={(theme) => ({
-                    color: '#fff',
-                    zIndex: theme.zIndex.drawer + 1,
-                })}
-                open={open}
-                data-testid='loader'
-            >
-                <CircularProgress color="inherit" data-testid="circular-progress"/>
-            </Backdrop>)}
-        </>
+        <Backdrop
+            sx={{
+                color: '#fff',
+                zIndex: 10,
+                opacity: 100
+            }}
+            open={open}
+            data-testid='loader'
+        >
+            <CircularProgress color="inherit" data-testid="circular-progress"/>
+        </Backdrop>
     );
 };
 
