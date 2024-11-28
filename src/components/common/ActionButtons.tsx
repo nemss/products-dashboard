@@ -25,7 +25,7 @@ const ActionButtons:
             <Button variant="outlined" onClick={onCancel}>
                 {cancelText}
             </Button>
-            <Button variant="contained" color={confirmColor} onClick={onConfirm}>
+            <Button variant="contained" color={confirmColor} onClick={onConfirm} data-testid="create-product-button">
                 {confirmText}
             </Button>
         </Box>

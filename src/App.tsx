@@ -160,7 +160,8 @@ const App: React.FC = () => {
                 <Box>
                     <Box textAlign="right" mb={2}>
                         {permissions.includes(PERMISSIONS.CREATE) && (
-                            <Button variant="contained" onClick={openCreateModal}>
+                            <Button variant="contained" onClick={openCreateModal}
+                                    data-testid="create-new-product-button">
                                 {BUTTON_TEXTS.CREATE}
                             </Button>
                         )}
