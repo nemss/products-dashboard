@@ -5,7 +5,7 @@ import ProductGrid from './components/products/ProductGrid.tsx';
 import ConfirmationModal from './components/common/ConfirmationModal.tsx';
 import CreateEditProductModal from './components/products/CreateEditProductModal.tsx';
 
-import {IProduct} from './interfaces/product';
+import {IProduct, ProductInput} from './interfaces/product';
 import {addProduct, deleteProduct, getProducts, updateProduct} from './services/apiService';
 import {getPermissions} from './services/permisionService';
 
@@ -134,6 +134,15 @@ const App: React.FC = () => {
         }
     };
 
+    const handleSubmit = async (product: ProductInput): Promise<void> => {
+        if ('id' in product) {
+            await handleEditProduct(product as IProduct);
+        } else {
+            await handleCreateProduct(product as Omit<IProduct, 'id'>);
+        }
+    };
+
+
     const closeCreateEditModal = () => setIsCreateEditModalOpen(false);
     const closeDeleteModal = () => setIsDeleteModalOpen(false);
 
@@ -168,7 +177,7 @@ const App: React.FC = () => {
                 <CreateEditProductModal
                     open={isCreateEditModalOpen}
                     onClose={closeCreateEditModal}
-                    onSubmit={productToEdit ? handleEditProduct : handleCreateProduct}
+                    onSubmit={handleSubmit}
                     initialValues={productToEdit || undefined}
                 />
 

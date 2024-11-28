@@ -5,5 +5,4 @@ export interface IProduct {
     currency: string;
 }
 
-export interface IProductForm extends Omit<IProduct, 'id'> {
-}
+export type ProductInput = Omit<IProduct, 'id'> | IProduct;
