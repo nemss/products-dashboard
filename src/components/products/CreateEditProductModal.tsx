@@ -74,7 +74,7 @@ const CreateEditProductModal:
     return (
         <Modal open={open} onClose={handleClose} {...generateAriaAttributes('create-edit-product-modal')}>
             <Box sx={modalStyle}>
-                <Typography variant="h6" component="h2" mb={2}>
+                <Typography variant="h6" component="h2" mb={2} data-testid="create-edit-modal-title">
                     {initialValues.name ? 'Edit Product' : 'Create Product'}
                 </Typography>
                 <form onSubmit={handleSubmit(submitHandler)}>
@@ -90,6 +90,7 @@ const CreateEditProductModal:
                                 error={!!errors.name}
                                 helperText={errors.name?.message}
                                 margin="normal"
+                                data-testid="name-field"
                             />
                         )}
                     />
@@ -106,6 +107,7 @@ const CreateEditProductModal:
                                 error={!!errors.price}
                                 helperText={errors.price?.message}
                                 margin="normal"
+                                data-testid="price-field"
                             />
                         )}
                     />
@@ -121,6 +123,7 @@ const CreateEditProductModal:
                                 error={!!errors.currency}
                                 helperText={errors.currency?.message}
                                 margin="normal"
+                                data-testid="currency-field"
                             />
                         )}
                     />
