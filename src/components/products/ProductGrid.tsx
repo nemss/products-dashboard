@@ -39,6 +39,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, permissions, onDelet
         <Box>
             <div className="ag-theme-alpine" style={{height: '33rem', width: '100%'}}>
                 <AgGridReact
+                    data-testid="products-grid"
                     rowData={products}
                     columnDefs={columnDefs}
                     pagination={true}
