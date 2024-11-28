@@ -1,6 +1,7 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
 import Loader from '../../../components/common/Loader';
+import {describe, expect, it} from 'vitest';
 
 describe('Loader Component', () => {
     it('should render the loader when open is true', () => {
