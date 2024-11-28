@@ -8,13 +8,13 @@ import {PERMISSIONS} from '../../constants/permisions.ts';
 import {CustomCellRendererProps} from 'ag-grid-react';
 import {IProduct} from '../../interfaces/product.ts';
 
-interface ActionButtonsProps extends CustomCellRendererProps {
+export interface GridActionButtonsProps extends Partial<CustomCellRendererProps> {
     permissions: string[];
     onEdit: (data: IProduct) => void;
     onDelete: (data: IProduct) => void;
 }
 
-const GridActionButtons: React.FC<ActionButtonsProps> = ({permissions, onEdit, onDelete, data}) => {
+const GridActionButtons: React.FC<GridActionButtonsProps> = ({permissions, onEdit, onDelete, data}) => {
     return (
         <Box style={{display: 'flex', gap: '0.5rem', height: '100%', padding: '0.125rem'}}>
             {permissions.includes(PERMISSIONS.UPDATE) && (
