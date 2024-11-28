@@ -7,7 +7,7 @@ import CreateEditProductModal from './components/products/CreateEditProductModal
 
 import {IProduct, ProductInput} from './interfaces/product';
 import {addProduct, deleteProduct, getProducts, updateProduct} from './services/apiService';
-import {getPermissions} from './services/permisionService';
+import {getPermissions} from './services/permissionService.ts';
 
 import {PERMISSIONS} from './constants/permisions';
 import {SNACKBAR_MESSAGES} from './constants/snackbarMessages';

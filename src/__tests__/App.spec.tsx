@@ -5,10 +5,10 @@ import {describe, expect, it, vi} from 'vitest';
 import App from '../App';
 import {PERMISSIONS} from '../constants/permisions';
 import * as apiService from '../services/apiService';
-import * as permissionService from '../services/permisionService';
+import * as permissionService from '../services/permissionService.ts';
 
 vi.mock('../services/apiService');
-vi.mock('../services/permisionService');
+vi.mock('../services/permissionService');
 
 describe('App Component', () => {
     beforeEach(() => {
