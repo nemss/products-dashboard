@@ -24,6 +24,7 @@ A React application to manage products with CRUD (Create, Read, Update, Delete) 
 - **React Hook Form**: For form management.
 - **Yup**: For form validation.
 - **AG Grid**: High-performance grid for data display.
+- **Vitest & React Testing Library**: Unit testing.
 
 ---
 
